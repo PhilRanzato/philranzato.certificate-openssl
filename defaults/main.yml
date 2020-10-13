@@ -13,7 +13,7 @@ common_name: "ElkStack"
 sans: "DNS:*.elk.es"
 # always set true or false
 basic_constraints:
-- "CA:true"
+- "CA:TRUE"
 key_usage:
 - digitalSignature
 - keyAgreement
