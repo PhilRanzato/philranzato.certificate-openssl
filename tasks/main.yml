@@ -13,7 +13,7 @@
 
 - name: "Install module dependencies: PyOpenSSL"
   pip:
-    name: PyOpenSSL
+    name: cryptography
     state: latest
   when: pip_installed.rc == 0
 
@@ -23,6 +23,7 @@
     size: "{{ size }}"
     type: "{{ type | default('RSA') }}"
     passphrase: "{{ key_passphrase }}"
+    cipher: auto
     backup: "{{ backup }}"
 
 - name: "Generate {{ cert_name }} CSR"
@@ -35,7 +36,7 @@
     email_address: "{{ email }}"
     common_name: "{{ common_name }}"
     subject_alt_name: "{{ sans }}"
-    basic_constraints: "{{ basic_constraints }}"
+    basic_constraints: "{{ basic_constraints | join(',') }}"
     key_usage: "{{ key_usage }}"
 
 - name: "Generate {{ cert_name }} Certificate"
