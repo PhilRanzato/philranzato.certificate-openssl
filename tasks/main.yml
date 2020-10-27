@@ -1,46 +1,15 @@
 ---
-- name: "Install Python PIP"
-  yum:
-    name: python-pip
-    state: latest
+- name: "Preflight Checks"
+  include_tasks: "00-preflight-checks.yml"
+  
+- name: "Install dependencies"
+  include_tasks: "01-dependencies.yml"
+  
+- name: "Generate CA"
+  include_tasks: "02-ca.yml"
+  when: "generate == 'CA'"
 
-- name: "Install Cryptography dependency"
-  pip:
-    name: cryptography
-    state: latest
-
-- name: "Ensure certificate directory exists"
-  file:
-    path: "{{ directory }}"
-    state: directory
-    recurse: yes
-
-- name: "Generate {{ cert_name }} private key"
-  openssl_privatekey:
-    path: "{{ directory }}/{{ cert_name }}-CA.key"
-    size: "{{ size }}"
-    type: "{{ type | default('RSA') }}"
-    passphrase: "{{ key_passphrase }}"
-    cipher: auto
-    backup: "{{ backup }}"
-
-- name: "Generate {{ cert_name }} CSR"
-  openssl_csr:
-    path: "{{ directory }}/{{ cert_name }}-CA.csr"
-    privatekey_path: "{{ directory }}/{{ cert_name }}-CA.key"
-    privatekey_passphrase: "{{ key_passphrase }}"
-    country_name: "{{ country }}"
-    organization_name: "{{ organization }}"
-    email_address: "{{ email }}"
-    common_name: "{{ common_name }}"
-    subject_alt_name: "{{ sans }}"
-    basic_constraints: "{{ basic_constraints | join(',') }}"
-    key_usage: "{{ key_usage }}"
-
-- name: "Generate {{ cert_name }} Certificate"
-  openssl_certificate:
-    path: "{{ directory }}/{{ cert_name }}-CA.crt"
-    privatekey_path: "{{ directory }}/{{ cert_name }}-CA.key"
-    privatekey_passphrase: "{{ key_passphrase }}"
-    csr_path: "{{ directory }}/{{ cert_name }}-CA.csr"
-    provider: selfsigned
+- name: "Generate Certificate"
+  include_tasks: "03-certificate.yml"
+  when: "generate == 'Certificate'"
+  
