@@ -23,7 +23,7 @@
 
 - name: "Generate {{ certificate.cert_name }} Certificate"
   openssl_certificate:
-    path: "{{ certificate.directory }}/{{ certificate.cert_name }}.crt"
+    path: "{{ certificate.directory }}/{{ certificate.cert_name }}.{{ certificate.cert_format }}"
     privatekey_path: "{{ certificate.directory }}/{{ certificate.cert_name }}.key"
     privatekey_passphrase: "{{ certificate.key_passphrase }}"
     csr_path: "{{ certificate.directory }}/{{ certificate.cert_name }}.csr"

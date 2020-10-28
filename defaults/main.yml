@@ -6,6 +6,8 @@ generate:
 ca:
   directory: /opt/private/ssl
   cert_name: "elastic"
+  # cert_format: "crt | pem"
+  cert_format: "crt"
   key_passphrase: "El4stic!"
   validity: "+80000d"
   size: "4096"
@@ -30,6 +32,8 @@ certificate:
     pass: "El4stic!"
   directory: /opt/private/ssl
   cert_name: "kibana"
+  # cert_format: "crt | pem"
+  cert_format: "crt"
   key_passphrase: "K1bana!"
   validity: "+3650d"
   size: "4096"
