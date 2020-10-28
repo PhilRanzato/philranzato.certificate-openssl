@@ -13,7 +13,10 @@
 
 - name: "Ensure certificate directory exists"
   file:
-    path: "{{ directory }}"
+    path: "{{ item }}"
     state: directory
     recurse: yes
+  loop:
+  - "{{ ca.directory }}"
+  - "{{ certificate.directory }}"
   become: true

@@ -1,0 +1,35 @@
+---
+- name: "Generate {{ certificate.cert_name }} private key"
+  openssl_privatekey:
+    path: "{{ certificate.directory }}/{{ certificate.cert_name }}.key"
+    size: "{{ certificate.size }}"
+    type: "{{ certificate.type | default('RSA') }}"
+    passphrase: "{{ certificate.key_passphrase }}"
+    cipher: auto
+    backup: "{{ certificate.backup }}"
+  become: true
+
+- name: "Generate {{ certificate.cert_name }} CSR"
+  openssl_csr:
+    path: "{{ certificate.directory }}/{{ certificate.cert_name }}.csr"
+    privatekey_path: "{{ certificate.directory }}/{{ certificate.cert_name }}.key"
+    privatekey_passphrase: "{{ certificate.key_passphrase }}"
+    country_name: "{{ certificate.country }}"
+    organization_name: "{{ certificate.organization }}"
+    email_address: "{{ certificate.email }}"
+    common_name: "{{ certificate.common_name }}"
+    subject_alt_name: "{{ certificate.sans | join(',') }}"
+  become: true
+
+- name: "Generate {{ certificate.cert_name }} Certificate"
+  openssl_certificate:
+    path: "{{ certificate.directory }}/{{ certificate.cert_name }}.crt"
+    privatekey_path: "{{ certificate.directory }}/{{ certificate.cert_name }}.key"
+    privatekey_passphrase: "{{ certificate.key_passphrase }}"
+    csr_path: "{{ certificate.directory }}/{{ certificate.cert_name }}.csr"
+    ownca_path: "{{ certificate.from_ca.cert }}"
+    ownca_privatekey_path: "{{ certificate.from_ca.key }}"
+    ownca_privatekey_passphrase: "{{ certificate.from_ca.pass }}"
+    ownca_not_after: "{{ certificate.validity }}"
+    provider: ownca
+  become: true

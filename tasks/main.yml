@@ -7,9 +7,9 @@
   
 - name: "Generate CA"
   include_tasks: "02-ca.yml"
-  when: "generate == 'CA'"
+  when: generate.ca
 
 - name: "Generate Certificate"
   include_tasks: "03-certificate.yml"
-  when: "generate == 'Certificate'"
+  when: generate.certificate
   

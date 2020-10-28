@@ -29,5 +29,6 @@
     privatekey_path: "{{ ca.directory }}/{{ ca.cert_name }}-CA.key"
     privatekey_passphrase: "{{ ca.key_passphrase }}"
     csr_path: "{{ ca.directory }}/{{ ca.cert_name }}-CA.csr"
+    selfsigned_not_after: "{{ ca.validity }}"
     provider: selfsigned
   become: true
