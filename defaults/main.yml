@@ -27,8 +27,8 @@ ca:
 
 certificate:
   from_ca:
-    cert: /opt/private/ssl/elastic-CA.crt
-    key: /opt/private/ssl/elastic-CA.key
+    cert: /opt/private/ssl/elastic.crt
+    key: /opt/private/ssl/elastic.key
     pass: "El4stic!"
   directory: /opt/private/ssl
   cert_name: "kibana"

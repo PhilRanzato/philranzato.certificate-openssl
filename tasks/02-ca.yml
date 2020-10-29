@@ -1,7 +1,7 @@
 ---
 - name: "Generate {{ ca.cert_name }} private key"
   openssl_privatekey:
-    path: "{{ ca.directory }}/{{ ca.cert_name }}-CA.key"
+    path: "{{ ca.directory }}/{{ ca.cert_name }}.key"
     size: "{{ ca.size }}"
     type: "{{ ca.type | default('RSA') }}"
     passphrase: "{{ ca.key_passphrase }}"
@@ -11,8 +11,8 @@
 
 - name: "Generate {{ ca.cert_name }} CSR"
   openssl_csr:
-    path: "{{ ca.directory }}/{{ ca.cert_name }}-CA.csr"
-    privatekey_path: "{{ ca.directory }}/{{ ca.cert_name }}-CA.key"
+    path: "{{ ca.directory }}/{{ ca.cert_name }}.csr"
+    privatekey_path: "{{ ca.directory }}/{{ ca.cert_name }}.key"
     privatekey_passphrase: "{{ ca.key_passphrase }}"
     country_name: "{{ ca.country }}"
     organization_name: "{{ ca.organization }}"
@@ -25,10 +25,10 @@
 
 - name: "Generate {{ ca.cert_name }} Certificate"
   openssl_certificate:
-    path: "{{ ca.directory }}/{{ ca.cert_name }}-CA.{{ ca.cert_format }}"
-    privatekey_path: "{{ ca.directory }}/{{ ca.cert_name }}-CA.key"
+    path: "{{ ca.directory }}/{{ ca.cert_name }}.{{ ca.cert_format }}"
+    privatekey_path: "{{ ca.directory }}/{{ ca.cert_name }}.key"
     privatekey_passphrase: "{{ ca.key_passphrase }}"
-    csr_path: "{{ ca.directory }}/{{ ca.cert_name }}-CA.csr"
+    csr_path: "{{ ca.directory }}/{{ ca.cert_name }}.csr"
     selfsigned_not_after: "{{ ca.validity }}"
     provider: selfsigned
   become: true
