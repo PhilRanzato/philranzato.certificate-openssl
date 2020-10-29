@@ -7,6 +7,8 @@
     passphrase: "{{ certificate.key_passphrase }}"
     cipher: auto
     backup: "{{ certificate.backup }}"
+    owner: "{{ certificate.owner }}"
+    group: "{{ certificate.group }}"
   become: true
 
 - name: "Generate {{ certificate.cert_name }} CSR"
@@ -19,6 +21,8 @@
     email_address: "{{ certificate.email }}"
     common_name: "{{ certificate.common_name }}"
     subject_alt_name: "{{ certificate.sans | join(',') }}"
+    owner: "{{ certificate.owner }}"
+    group: "{{ certificate.group }}"
   become: true
 
 - name: "Generate {{ certificate.cert_name }} Certificate"
@@ -31,5 +35,7 @@
     ownca_privatekey_path: "{{ certificate.from_ca.key }}"
     ownca_privatekey_passphrase: "{{ certificate.from_ca.pass }}"
     ownca_not_after: "{{ certificate.validity }}"
+    owner: "{{ certificate.owner }}"
+    group: "{{ certificate.group }}"
     provider: ownca
   become: true

@@ -24,6 +24,8 @@ ca:
   key_usage:
   - digitalSignature
   - keyAgreement
+  owner: "root"
+  group: "root"
 
 certificate:
   from_ca:
@@ -47,3 +49,5 @@ certificate:
   sans: 
   - "DNS:*.elk.es"
   - "IP:35.228.156.50"
+  owner: "root"
+  group: "root"

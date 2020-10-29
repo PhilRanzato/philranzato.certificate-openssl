@@ -21,6 +21,8 @@
     subject_alt_name: "{{ ca.sans }}"
     basic_constraints: "{{ ca.basic_constraints | join(',') }}"
     key_usage: "{{ ca.key_usage }}"
+    owner: "{{ ca.owner }}"
+    group: "{{ ca.group }}"
   become: true
 
 - name: "Generate {{ ca.cert_name }} Certificate"
@@ -30,5 +32,7 @@
     privatekey_passphrase: "{{ ca.key_passphrase }}"
     csr_path: "{{ ca.directory }}/{{ ca.cert_name }}.csr"
     selfsigned_not_after: "{{ ca.validity }}"
+    owner: "{{ ca.owner }}"
+    group: "{{ ca.group }}"
     provider: selfsigned
   become: true
