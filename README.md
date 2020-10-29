@@ -1,38 +1,125 @@
-Role Name
+plrr.certificate-openssl
 =========
 
-Create a certificate bundle with OpenSSL.
+Create a CA or a Certificate with OpenSSL.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+None.
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+```yaml
+---
+# Control variable to choose whether generating a ca or a certificate (or both)
+generate: 
+  ca: false
+  certificate: false
+
+# CA variables
+ca:
+  directory: /opt/private/ssl
+  cert_name: "elastic"
+  # cert_format: "crt | pem"
+  cert_format: "crt"
+  key_passphrase: "El4stic!"
+  validity: "+80000d"
+  size: "4096"
+  type: "RSA"
+  backup: yes
+  country: "ES"
+  organization: "elk"
+  email: "elastic.kibana@logstash.elk"
+  common_name: "ElkStack"
+  # Values must be prefixed by their options. (i.e., email, URI, DNS, RID, IP, dirName, otherName and the ones specific to your CA)
+  sans: "DNS:*.elk.es"
+  basic_constraints:
+  - "CA:TRUE"
+  key_usage:
+  - digitalSignature
+  - keyAgreement
+  owner: "root"
+  group: "root"
+
+# Certificates variables
+certificate:
+  from_ca:
+    cert: /opt/private/ssl/elastic.crt
+    key: /opt/private/ssl/elastic.key
+    pass: "El4stic!"
+  directory: /opt/private/ssl
+  cert_name: "kibana"
+  # cert_format: "crt | pem"
+  cert_format: "crt"
+  key_passphrase: "K1bana!"
+  validity: "+3650d"
+  size: "4096"
+  type: "RSA"
+  backup: yes
+  country: "ES"
+  organization: "elk"
+  email: "elastic.kibana@logstash.elk"
+  common_name: "ElkStack"
+  # Values must be prefixed by their options. (i.e., email, URI, DNS, RID, IP, dirName, otherName and the ones specific to your CA)
+  sans: 
+  - "DNS:*.elk.es"
+  - "IP:35.228.156.50"
+  owner: "root"
+  group: "root"
+```
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+- `python-pip` ~ installed by the role
+- `cryptoghraphy` ~ installed by the role
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+```yaml
+- name: "Create Certificate"
+  hosts: target
+  roles:
+  - { role: plrr.certificate-openssl }
+  vars:
+    generate: 
+        ca: false
+        certificate: false
+    certificate:
+        from_ca:
+            cert: /opt/private/ssl/elastic.crt
+            key: /opt/private/ssl/elastic.key
+            pass: "El4stic!"
+        directory: /opt/private/ssl
+        cert_name: "kibana"
+        # cert_format: "crt | pem"
+        cert_format: "crt"
+        key_passphrase: "K1bana!"
+        validity: "+3650d"
+        size: "4096"
+        type: "RSA"
+        backup: yes
+        country: "ES"
+        organization: "elk"
+        email: "elastic.kibana@logstash.elk"
+        common_name: "ElkStack"
+        # Values must be prefixed by their options. (i.e., email, URI, DNS, RID, IP, dirName, otherName and the ones specific to your CA)
+        sans: 
+        - "DNS:*.elk.es"
+        - "IP:35.228.156.50"
+        owner: "root"
+        group: "root"
+```
 
 License
 -------
 
-BSD
+Proprietary
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Check me on [LinkedIn](www.linkedin.com/in/phil-ranzato-47b8bb194)

@@ -1,0 +1,22 @@
+---
+- name: "Install Python PIP"
+  yum:
+    name: python-pip
+    state: latest
+  become: true
+
+- name: "Install Cryptography dependency"
+  pip:
+    name: cryptography
+    state: latest
+  become: true
+
+- name: "Ensure certificate directory exists"
+  file:
+    path: "{{ item }}"
+    state: directory
+    recurse: yes
+  loop:
+  - "{{ ca.directory }}"
+  - "{{ certificate.directory }}"
+  become: true

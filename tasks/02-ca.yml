@@ -1,0 +1,38 @@
+---
+- name: "Generate {{ ca.cert_name }} private key"
+  openssl_privatekey:
+    path: "{{ ca.directory }}/{{ ca.cert_name }}.key"
+    size: "{{ ca.size }}"
+    type: "{{ ca.type | default('RSA') }}"
+    passphrase: "{{ ca.key_passphrase }}"
+    cipher: auto
+    backup: "{{ ca.backup }}"
+  become: true
+
+- name: "Generate {{ ca.cert_name }} CSR"
+  openssl_csr:
+    path: "{{ ca.directory }}/{{ ca.cert_name }}.csr"
+    privatekey_path: "{{ ca.directory }}/{{ ca.cert_name }}.key"
+    privatekey_passphrase: "{{ ca.key_passphrase }}"
+    country_name: "{{ ca.country }}"
+    organization_name: "{{ ca.organization }}"
+    email_address: "{{ ca.email }}"
+    common_name: "{{ ca.common_name }}"
+    subject_alt_name: "{{ ca.sans }}"
+    basic_constraints: "{{ ca.basic_constraints | join(',') }}"
+    key_usage: "{{ ca.key_usage }}"
+    owner: "{{ ca.owner }}"
+    group: "{{ ca.group }}"
+  become: true
+
+- name: "Generate {{ ca.cert_name }} Certificate"
+  openssl_certificate:
+    path: "{{ ca.directory }}/{{ ca.cert_name }}.{{ ca.cert_format }}"
+    privatekey_path: "{{ ca.directory }}/{{ ca.cert_name }}.key"
+    privatekey_passphrase: "{{ ca.key_passphrase }}"
+    csr_path: "{{ ca.directory }}/{{ ca.cert_name }}.csr"
+    selfsigned_not_after: "{{ ca.validity }}"
+    owner: "{{ ca.owner }}"
+    group: "{{ ca.group }}"
+    provider: selfsigned
+  become: true
