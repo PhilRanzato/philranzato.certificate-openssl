@@ -49,5 +49,12 @@ certificate:
   sans: 
   - "DNS:*.elk.es"
   - "IP:35.228.156.50"
+  basic_constraints:
+  - "CA:FALSE"
+  key_usage:
+  - keyAgreement
+  extended_key_usage:
+  - clientAuth
+  - serverAuth
   owner: "root"
   group: "root"
