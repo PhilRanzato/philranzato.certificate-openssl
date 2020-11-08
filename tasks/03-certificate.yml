@@ -6,6 +6,7 @@
     type: "{{ certificate.type | default('RSA') }}"
     passphrase: "{{ certificate.key_passphrase }}"
     cipher: auto
+    format: "{{ certificate.key_format | default('pkcs1') }}"
     backup: "{{ certificate.backup }}"
     owner: "{{ certificate.owner }}"
     group: "{{ certificate.group }}"
