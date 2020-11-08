@@ -39,6 +39,8 @@ certificate:
   key_passphrase: "K1bana!"
   # key_format: "pkcs1 | pkcs8" See https://docs.ansible.com/ansible/latest/collections/community/crypto/openssl_privatekey_module.html#parameter-format
   key_format: "pkcs1"
+  key_mode: "0640"
+  key_ciphers: auto
   validity: "+3650d"
   size: "4096"
   type: "RSA"

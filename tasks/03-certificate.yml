@@ -5,11 +5,12 @@
     size: "{{ certificate.size }}"
     type: "{{ certificate.type | default('RSA') }}"
     passphrase: "{{ certificate.key_passphrase }}"
-    cipher: auto
+    cipher: "{{ certificate.key_ciphers }}"
     format: "{{ certificate.key_format | default('pkcs1') }}"
     backup: "{{ certificate.backup }}"
     owner: "{{ certificate.owner }}"
     group: "{{ certificate.group }}"
+    mode: "{{ certificate.key_mode }}"
   become: true
 
 - name: "Generate {{ certificate.cert_name }} CSR"
