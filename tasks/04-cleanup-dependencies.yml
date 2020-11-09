@@ -1,0 +1,13 @@
+---
+- name: "Remove Cryptography dependency"
+  pip:
+    name: cryptography
+    state: absent
+  become: true
+
+- name: "Install Python PIP"
+  yum:
+    name: python-pip
+    state: absent
+  become: true
+
