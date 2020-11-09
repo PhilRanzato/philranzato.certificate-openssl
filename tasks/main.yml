@@ -12,4 +12,6 @@
 - name: "Generate Certificate"
   include_tasks: "03-certificate.yml"
   when: generate.certificate
-  
+
+- name: "Remove dependencies"
+  include_tasks: "04-cleanup-dependencies.yml"

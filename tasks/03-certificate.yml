@@ -5,10 +5,12 @@
     size: "{{ certificate.size }}"
     type: "{{ certificate.type | default('RSA') }}"
     passphrase: "{{ certificate.key_passphrase }}"
-    cipher: auto
+    cipher: "{{ certificate.key_ciphers | default('auto') }}"
+    format: "{{ certificate.key_format | default('pkcs1') }}"
     backup: "{{ certificate.backup }}"
-    owner: "{{ certificate.owner }}"
-    group: "{{ certificate.group }}"
+    owner: "{{ certificate.owner | default('root') }}"
+    group: "{{ certificate.group | default('root') }}"
+    mode: "{{ certificate.key_mode | default('0640') }}"
   become: true
 
 - name: "Generate {{ certificate.cert_name }} CSR"
@@ -21,8 +23,11 @@
     email_address: "{{ certificate.email }}"
     common_name: "{{ certificate.common_name }}"
     subject_alt_name: "{{ certificate.sans | join(',') }}"
-    owner: "{{ certificate.owner }}"
-    group: "{{ certificate.group }}"
+    basic_constraints: "{{ certificate.basic_constraints | join(',') }}"
+    key_usage: "{{ certificate.key_usage }}"
+    extended_key_usage: "{{ certificate.extended_key_usage }}"
+    owner: "{{ certificate.owner | default('root') }}"
+    group: "{{ certificate.group | default('root') }}"
   become: true
 
 - name: "Generate {{ certificate.cert_name }} Certificate"
@@ -35,7 +40,7 @@
     ownca_privatekey_path: "{{ certificate.from_ca.key }}"
     ownca_privatekey_passphrase: "{{ certificate.from_ca.pass }}"
     ownca_not_after: "{{ certificate.validity }}"
-    owner: "{{ certificate.owner }}"
-    group: "{{ certificate.group }}"
+    owner: "{{ certificate.owner | default('root') }}"
+    group: "{{ certificate.group | default('root') }}"
     provider: ownca
   become: true
